@@ -22,31 +22,31 @@
         <h1 class="section-title">Welcome to TODO list</h1>
         <form id="sign-in">
             <div class="form-group">
-                <label for="email"><span>*</span> Email address</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                <label for="regEmail"><span>*</span> Email address</label>
+                <input type="email" class="email" name="email" id="regEmail" placeholder="Email" required>
             </div>
             <div class="form-group">
-                <label for="login"><span>*</span> Login</label>
-                <input type="text" class="form-control" name="login" id="login" pattern="[a-zA-Z0-9]+" placeholder="Login">
+                <label for="regLogin"><span>*</span> Login</label>
+                <input type="text" class="login" name="login" id="regLogin" placeholder="Login" required>
             </div>
             <div class="form-group">
-                <label for="first_name"><span>*</span> First name</label>
-                <input type="text" class="form-control" name="firstName" id="first_name" placeholder="First name">
+                <label for="regFirstName"><span>*</span> First name</label>
+                <input type="text" class="first-name" name="firstName" id="regFirstName" placeholder="First name" required>
             </div>
             <div class="form-group">
-                <label for="last_name"><span>*</span> Last name</label>
-                <input type="text" class="form-control" name="lastName" id="last_name" placeholder="Last name">
+                <label for="regLastName"><span>*</span> Last name</label>
+                <input type="text" class="last-name" name="lastName" id="regLastName" placeholder="Last name" required>
             </div>
             <div class="form-group">
-                <label for="password"><span>*</span> Password</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                <label for="regPass"><span>*</span> Password</label>
+                <input type="password" class="password" name="password" id="regPass" placeholder="Password" required>
             </div>
             <div class="form-group">
-                <label for="confirm_pass"><span>*</span> Confirm password</label>
-                <input type="password" class="form-control" name="confPass" id="confirm_pass" placeholder="Confirm password">
+                <label for="regConfPass"><span>*</span> Confirm password</label>
+                <input type="password" class="confirm-pass" name="confPass" id="regConfPass" placeholder="Confirm password" required>
             </div>
 
-            <button type="submit" class="btn" id="sign-btn">Sing up</button>
+            <button type="submit" id="sign-btn">Sing up</button>
 
         </form>
 

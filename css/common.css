@@ -1180,6 +1180,7 @@ header h1 {
 .authentication {
   height: 100vh;
   padding-top: 60px;
+  padding-bottom: 50px;
 }
 .authentication h1 {
   width: 352px;
@@ -1216,16 +1217,16 @@ header h1 {
   color: #e9322d;
 }
 .authentication form button {
-  position: absolute;
   width: 100%;
-  bottom: -80px;
+  margin-top: 40px;
   padding: 10px;
   text-transform: uppercase;
 }
-.invalid-message {
+#invalid-message {
   width: 100%;
-  color: #e9322d;
   position: absolute;
+  left: 0;
+  color: #e9322d;
   text-align: center;
 }
 .invalid-input {
