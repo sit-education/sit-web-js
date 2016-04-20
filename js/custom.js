@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 $(document).ready(function () {
 
     function checkSamePass(passwordField, confPassField) {
@@ -10,17 +10,71 @@ $(document).ready(function () {
         return mailPattern.test(email);
     }
 
-    //function getFormData() {
-    //    var formData = 0;
-    //    var objFormData = {};
-    //    var name = 0;
-    //    $('#sign-in input').each(function () {
-    //        name = $(this).attr('name');
-    //        objFormData[name] = $(this).val();
-    //    });
-    //    formData = JSON.stringify(objFormData);
-    //    return formData;
-    //}
+    function identifyErrorAnswer(error){
+        var response = 0;
+        var totalErrorResponse = 0;
+        response = JSON.parse(error.responseText);
+        totalErrorResponse = {
+            status: response.status,
+            errorMessage: response.errors[0].error_message
+        };
+        $('form button').before('<span id="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
+    }
+
+    function authOfUser(userFormData){
+        $.ajax({
+            type: 'POST',
+            url: 'https://sit-todo-test.appspot.com/api/v1/login',
+            data: userFormData,
+            contentType: 'application/json',
+            success: function(data){
+                if(data.status){
+                    var tokenExpired = (data.data.tokenExpired) * 1000;
+                    var userId = data.data.user_id;
+                    tokenExpired = new Date(tokenExpired).toUTCString();
+                    //document.cookie = 'token=' + data.data.tokenKey + '; path=/; expires=' + tokenExpired;
+                    window.localStorage.setItem('access-token', data.data.tokenKey);
+                    window.location.href = 'tickets.html';
+                }else{
+                    $('form button').before('<span id="invalid-message">Something was wrong. Please try again</span>');
+                }
+
+
+
+
+            },
+            error: function(error){
+                identifyErrorAnswer(error);
+            }
+        });
+        setTimeout(function(){
+            $('form button').prop('disabled', false);
+        },2000);
+    }
+
+    function registerOfUser(registerFormData) {
+        $.ajax({
+            type: 'POST',
+            url: 'https://sit-todo-test.appspot.com/api/v1/signup',
+            data: registerFormData,
+            contentType: 'application/json',
+            success: function (data) {
+                if(data.status){
+                    window.location.href = 'confirm.html';
+                }else{
+                    $('form button').before('<span id="invalid-message">Something was wrong. Please try again</span>');
+                }
+            },
+            error: function (error) {
+                identifyErrorAnswer(error);
+            }
+
+        });
+        setTimeout(function(){
+            $('form button').prop('disabled', false);
+        },2000);
+    }
+
 
 
 
@@ -39,7 +93,18 @@ $(document).ready(function () {
             objFormData[name] = $(this).val();
         });
         formData = JSON.stringify(objFormData);
-        registerOfUser(formData);
+
+
+        if ($(this).find('button').attr('name') == 'sign-up'){
+            registerOfUser(formData);
+        }
+
+        if ($(this).find('button').attr('name') == 'sign-in'){
+            authOfUser(formData);
+        }
+
+
+
 
 
 
@@ -96,35 +161,34 @@ $(document).ready(function () {
 
     });
 
-    function registerOfUser(registerFormData) {
+    $('#logout-btn').on('click', function(){
+        var accessToken = localStorage.getItem('access-token');
         $.ajax({
             type: 'POST',
-            url: 'https://sit-todo-test.appspot.com/api/v1/signup',
-            data: registerFormData,
-            contentType: 'application/json',
-            success: function (data) {
-                var tokenExpired = (data.data.tokenExpired) * 1000;
-                tokenExpired = new Date(tokenExpired).toUTCString();
-                //document.cookie = 'token=' + data.data.tokenKey + '; path=/; expires=' + tokenExpired;
-                window.localStorage.setItem('token', data.data.tokenKey);
-                window.location.href = 'confirm.html';
+            url: 'https://sit-todo-test.appspot.com/api/v1/logout',
+            headers: {
+                'Token-Key': accessToken,
+                'Content-Type':'application/json'
             },
-            error: function (error) {
-                var response = 0;
-                var totalErrorResponse = 0;
-                response = JSON.parse(error.responseText);
-                totalErrorResponse = {
-                    status: response.status,
-                    errorMessage: response.errors[0].error_message
-                };
-                $('form button').before('<span id="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
+            success: function(data){
+                if(data.status){
+                    localStorage.removeItem('access-token');
+                    window.location.href = 'index.html';
+                }else{
+                    alert('Sorry an error occurred on server');
+                    console.log(data);
+                }
+            },
+            error: function (error){
+                alert('Sorry an error occurred on server');
+                console.log(error);
             }
 
+
         });
-        setTimeout(function(){
-            $('form button').prop('disabled', false);
-        },2000);
-    }
+    });
+
+
 
 
 

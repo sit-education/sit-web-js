@@ -1135,32 +1135,40 @@ body {
   font-weight: 400;
   font-size: 14px;
   color: #000000;
+  padding-top: 60px;
 }
-button {
+a {
+  text-decoration: none;
+}
+button,
+.btn {
   background: #008f73;
   color: #fff;
-  border: none;
-  padding: 5px;
+  padding: 10px;
   cursor: pointer;
+  text-transform: uppercase;
+  border: 1px solid transparent;
 }
-button:hover {
-  background-color: #fff;
-  color: #008f63;
-  border: 1px solid #008f63;
-}
-button:active {
+button:hover,
+.btn:hover {
   -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
   background-color: #008f63;
   color: #fff;
 }
+button:active,
+.btn:active {
+  background-color: #fff;
+  color: #008f63;
+  border: 1px solid #008f63;
+}
 input {
   width: 100%;
   background-color: #ffffff;
-  border: 1px solid #cccccc;
+  border: 1px solid #bbb;
   display: inline-block;
-  height: 30px;
-  padding: 4px 10px;
+  height: 40px;
+  padding: 0 10px 2px 10px;
   margin-bottom: 10px;
   line-height: 20px;
   color: #555555;
@@ -1169,17 +1177,40 @@ input {
 }
 header {
   width: 100%;
-  background: #bbbbbb;
+  background: #fff;
   min-height: 35px;
   overflow: hidden;
   position: fixed;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid black;
+}
+header .container {
+  width: 100%;
+  padding: 0 10px;
+  background: #bbb;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
 }
 header h1 {
-  margin: 10px;
+  line-height: 30px;
+  display: inline-block;
+}
+header button {
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
+.container {
+  overflow: hidden;
 }
 .authentication {
-  height: 100vh;
-  padding-top: 60px;
   padding-bottom: 50px;
 }
 .authentication h1 {
@@ -1218,9 +1249,24 @@ header h1 {
 }
 .authentication form button {
   width: 100%;
-  margin-top: 40px;
   padding: 10px;
+  margin-top: 40px;
   text-transform: uppercase;
+}
+.authentication form a.btn {
+  text-align: center;
+  margin-top: 20px;
+}
+.sect-confirm {
+  text-align: center;
+  padding: 50px;
+}
+.sect-confirm h1 {
+  font-size: 30px;
+}
+.sect-confirm .btn {
+  display: inline-block;
+  margin-top: 50px;
 }
 #invalid-message {
   width: 100%;
@@ -1228,7 +1274,4 @@ header h1 {
   left: 0;
   color: #e9322d;
   text-align: center;
-}
-.invalid-input {
-  border: 1px solid #e9322d;
 }
