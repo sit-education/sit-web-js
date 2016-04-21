@@ -1,6 +1,7 @@
 'use strict';
 $(document).ready(function () {
 
+    $('form button').prop('disabled', false);
 
     var TOKEN_NAME = 'access-token';
     var arrPagePath = [];

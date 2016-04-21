@@ -1142,7 +1142,8 @@ a {
 }
 button,
 .btn {
-  line-height: 40px;
+  line-height: 38px;
+  padding: 0 10px 0 10px;
   background: #008f73;
   color: #fff;
   cursor: pointer;
