@@ -1,14 +1,59 @@
 'use strict';
 $(document).ready(function () {
 
-    function checkSamePass(passwordField, confPassField) {
-        return (passwordField.localeCompare(confPassField));
+
+    var TOKEN_NAME = 'access-token';
+    var arrPagePath = [];
+    var currentPage= window.location.pathname;
+    arrPagePath = currentPage.split('/');
+    currentPage = arrPagePath[arrPagePath.length-1];
+
+    function getValueFromCookie(nameOfParameter){
+        var arrCookies = [];
+        var dictionaryCookies = {};
+        var oneCookie = [];
+
+        var cookie = document.cookie;
+        arrCookies = document.cookie.split('; ');
+
+        if(!(document.cookie)){
+            return false;
+        }
+
+        for (var i = 0; i < arrCookies.length; i++){
+            oneCookie = arrCookies[i].split('=');
+            dictionaryCookies[oneCookie[0]] = oneCookie[1];
+
+        }
+        if(dictionaryCookies[nameOfParameter]){
+            return dictionaryCookies[nameOfParameter];
+        }else{
+            return false;
+        }
+
     }
 
-    function checkEmail(email) {
-        var mailPattern = /[0-9a-z_-]+@[0-9a-z_-]+\.[a-z]{2,5}/i;
-        return mailPattern.test(email);
-    }
+
+
+    var accessToken = getValueFromCookie(TOKEN_NAME);
+
+    //if (accessToken == 'tickets.html'){
+    //    if(!(accessToken)){
+    //        window.location.href = 'index.html';
+    //    }
+    //}
+
+
+    var SOME_ERROR = 'Something was wrong. Please try again';
+
+    //function checkSamePass(passwordField, confPassField) {
+    //    return (passwordField.localeCompare(confPassField));
+    //}
+    //
+    //function checkEmail(email) {
+    //    var mailPattern = /[0-9a-z_-]+@[0-9a-z_-]+\.[a-z]{2,5}/i;
+    //    return mailPattern.test(email);
+    //}
 
     function identifyErrorAnswer(error){
         var response = 0;
@@ -29,19 +74,14 @@ $(document).ready(function () {
             contentType: 'application/json',
             success: function(data){
                 if(data.status){
+                    var accessToken = data.data.tokenKey;
                     var tokenExpired = (data.data.tokenExpired) * 1000;
-                    var userId = data.data.user_id;
                     tokenExpired = new Date(tokenExpired).toUTCString();
-                    //document.cookie = 'token=' + data.data.tokenKey + '; path=/; expires=' + tokenExpired;
-                    window.localStorage.setItem('access-token', data.data.tokenKey);
+                    document.cookie = TOKEN_NAME + '=' + accessToken + '; path=/; expires=' + tokenExpired;
                     window.location.href = 'tickets.html';
                 }else{
-                    $('form button').before('<span id="invalid-message">Something was wrong. Please try again</span>');
+                    $('form button').before('<span id="invalid-message">'+ SOME_ERROR +'</span>');
                 }
-
-
-
-
             },
             error: function(error){
                 identifyErrorAnswer(error);
@@ -50,6 +90,7 @@ $(document).ready(function () {
         setTimeout(function(){
             $('form button').prop('disabled', false);
         },2000);
+
     }
 
     function registerOfUser(registerFormData) {
@@ -60,9 +101,12 @@ $(document).ready(function () {
             contentType: 'application/json',
             success: function (data) {
                 if(data.status){
-                    window.location.href = 'confirm.html';
+                    $('form').fadeOut(500, function(){
+                        $('.after-action').fadeIn(500);
+                    });
+
                 }else{
-                    $('form button').before('<span id="invalid-message">Something was wrong. Please try again</span>');
+                    $('form button').before('<span id="invalid-message">'+ SOME_ERROR +'</span>');
                 }
             },
             error: function (error) {
@@ -75,7 +119,28 @@ $(document).ready(function () {
         },2000);
     }
 
-
+    function recoverPass(recoverFormData){
+        $.ajax({
+            type: 'POST',
+            url: 'https://sit-todo-test.appspot.com/api/v1/restorePassword',
+            data: recoverFormData,
+            headers: {
+                'Content-Type':'application/json'
+            },
+            success: function (data) {
+                if(data.status){
+                    $('form').fadeOut(500, function(){
+                        $('.after-action').fadeIn(500);
+                    });
+                }else{
+                    $('form button').before('<span id="invalid-message">'+ SOME_ERROR +'</span>');
+                }
+            },
+            error: function(error){
+                identifyErrorAnswer(error);
+            }
+        });
+    }
 
 
     $('form').on('submit', function (event) {
@@ -102,6 +167,11 @@ $(document).ready(function () {
         if ($(this).find('button').attr('name') == 'sign-in'){
             authOfUser(formData);
         }
+
+        if ($(this).find('button').attr('name') == 'recover-pass-btn'){
+            recoverPass(formData);
+        }
+
 
 
 
@@ -162,7 +232,6 @@ $(document).ready(function () {
     });
 
     $('#logout-btn').on('click', function(){
-        var accessToken = localStorage.getItem('access-token');
         $.ajax({
             type: 'POST',
             url: 'https://sit-todo-test.appspot.com/api/v1/logout',
@@ -172,7 +241,7 @@ $(document).ready(function () {
             },
             success: function(data){
                 if(data.status){
-                    localStorage.removeItem('access-token');
+                    document.cookie = TOKEN_NAME + '=; path=/; expires= Thu, 01 Jan 1970 00:00:01 GMT';
                     window.location.href = 'index.html';
                 }else{
                     alert('Sorry an error occurred on server');
@@ -187,11 +256,6 @@ $(document).ready(function () {
 
         });
     });
-
-
-
-
-
 
 });
 

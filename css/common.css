@@ -1142,9 +1142,9 @@ a {
 }
 button,
 .btn {
+  line-height: 40px;
   background: #008f73;
   color: #fff;
-  padding: 10px;
   cursor: pointer;
   text-transform: uppercase;
   border: 1px solid transparent;
@@ -1162,18 +1162,19 @@ button:active,
   color: #008f63;
   border: 1px solid #008f63;
 }
+a.btn {
+  display: inline-block;
+}
 input {
   width: 100%;
   background-color: #ffffff;
   border: 1px solid #bbb;
   display: inline-block;
-  height: 40px;
+  line-height: 36px;
   padding: 0 10px 2px 10px;
   margin-bottom: 10px;
-  line-height: 20px;
   color: #555555;
   border-radius: 4px;
-  vertical-align: middle;
 }
 header {
   width: 100%;
@@ -1249,7 +1250,6 @@ header button {
 }
 .authentication form button {
   width: 100%;
-  padding: 10px;
   margin-top: 40px;
   text-transform: uppercase;
 }
@@ -1274,4 +1274,12 @@ header button {
   left: 0;
   color: #e9322d;
   text-align: center;
+}
+.after-action {
+  display: none;
+  overflow: hidden;
+  text-align: center;
+}
+.after-action .btn {
+  margin-top: 30px;
 }
