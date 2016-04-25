@@ -1,15 +1,17 @@
 'use strict';
 $(document).ready(function () {
 
+    var TOKEN_NAME = 'access-token';
+    var SOME_ERROR = 'Something was wrong. Please try later';
+
     $('form button').prop('disabled', false);
 
-    var TOKEN_NAME = 'access-token';
     var arrPagePath = [];
     var currentPage= window.location.pathname;
     arrPagePath = currentPage.split('/');
     currentPage = arrPagePath[arrPagePath.length-1];
 
-    function getValueFromCookie(nameOfParameter){
+    function getValueFromCookie(nameOfCookie){
         var arrCookies = [];
         var dictionaryCookies = {};
         var oneCookie = [];
@@ -26,8 +28,8 @@ $(document).ready(function () {
             dictionaryCookies[oneCookie[0]] = oneCookie[1];
 
         }
-        if(dictionaryCookies[nameOfParameter]){
-            return dictionaryCookies[nameOfParameter];
+        if(dictionaryCookies[nameOfCookie]){
+            return dictionaryCookies[nameOfCookie];
         }else{
             return false;
         }
@@ -45,7 +47,7 @@ $(document).ready(function () {
     //}
 
 
-    var SOME_ERROR = 'Something was wrong. Please try again';
+
 
     //function checkSamePass(passwordField, confPassField) {
     //    return (passwordField.localeCompare(confPassField));
@@ -57,14 +59,18 @@ $(document).ready(function () {
     //}
 
     function identifyErrorAnswer(error){
-        var response = 0;
-        var totalErrorResponse = 0;
-        response = JSON.parse(error.responseText);
-        totalErrorResponse = {
-            status: response.status,
-            errorMessage: response.errors[0].error_message
-        };
-        $('form button').before('<span id="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
+        if(!(error.status)){
+            var response = 0;
+            var totalErrorResponse = 0;
+            response = JSON.parse(error.responseText);
+            totalErrorResponse = {
+                status: response.status,
+                errorMessage: response.errors[0].error_message
+            };
+            $('form button').before('<span class="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
+        }else{
+            $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+        }
     }
 
     function authOfUser(userFormData){
@@ -78,10 +84,11 @@ $(document).ready(function () {
                     var accessToken = data.data.tokenKey;
                     var tokenExpired = (data.data.tokenExpired) * 1000;
                     tokenExpired = new Date(tokenExpired).toUTCString();
-                    document.cookie = TOKEN_NAME + '=' + accessToken + '; path=/; expires=' + tokenExpired;
+                    //document.cookie = TOKEN_NAME + '=' + accessToken + '; path=/; expires=' + tokenExpired;
+                    document.cookie = TOKEN_NAME + '=' + accessToken + '; path=/';
                     window.location.href = 'tickets.html';
                 }else{
-                    $('form button').before('<span id="invalid-message">'+ SOME_ERROR +'</span>');
+                    $('form button').before('<span class="invalid-message">'+ SOME_ERROR +'</span>');
                 }
             },
             error: function(error){
@@ -107,7 +114,7 @@ $(document).ready(function () {
                     });
 
                 }else{
-                    $('form button').before('<span id="invalid-message">'+ SOME_ERROR +'</span>');
+                    $('form button').before('<span class="invalid-message">'+ SOME_ERROR +'</span>');
                 }
             },
             error: function (error) {
@@ -115,9 +122,6 @@ $(document).ready(function () {
             }
 
         });
-        setTimeout(function(){
-            $('form button').prop('disabled', false);
-        },2000);
     }
 
     function recoverPass(recoverFormData){
@@ -134,7 +138,30 @@ $(document).ready(function () {
                         $('.after-action').fadeIn(500);
                     });
                 }else{
-                    $('form button').before('<span id="invalid-message">'+ SOME_ERROR +'</span>');
+                    $('form button').before('<span class="invalid-message">'+ SOME_ERROR +'</span>');
+                }
+            },
+            error: function(error){
+                identifyErrorAnswer(error);
+            }
+        });
+    }
+
+    function addTask(addTaskFormData){
+        $.ajax({
+            type: 'POST',
+            url: 'https://sit-todo-test.appspot.com/api/v1/item',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token-Key': accessToken
+            },
+            data: addTaskFormData,
+            success: function(data){
+                if(data.status){
+                    window.location.href = 'tickets.html';
+                }else{
+                    $('form button').before('<span class="invalid-message">'+ SOME_ERROR +'</span>');
+                    console.log(data);
                 }
             },
             error: function(error){
@@ -144,34 +171,56 @@ $(document).ready(function () {
     }
 
 
+
     $('form').on('submit', function (event) {
         event.preventDefault();
+        var idForm = $(this).attr('id');
         $(this).find('button').prop('disabled', true);
-        $('#invalid-message').remove();
-
-        var fail = false;
+        $('.invalid-message').remove();
         var formData = 0;
         var objFormData = {};
-
         var name = 0;
-        $(this).find('input').each(function () {
+        $('input, textarea').each(function () {
             name = $(this).attr('name');
             objFormData[name] = $(this).val();
         });
         formData = JSON.stringify(objFormData);
+        alert(formData);
 
+        switch(idForm){
+            case 'login':
+                authOfUser(formData);
+                break;
 
-        if ($(this).find('button').attr('name') == 'sign-up'){
-            registerOfUser(formData);
+            case 'sign-up':
+                registerOfUser(formData);
+                break;
+
+            case 'recover-password':
+                recoverPass(formData);
+                break;
+
+            case 'add-task':
+                addTask(formData);
+                break;
         }
 
-        if ($(this).find('button').attr('name') == 'sign-in'){
-            authOfUser(formData);
-        }
+        setTimeout(function(){
+            $('form button').prop('disabled', false);
+        },2000);
 
-        if ($(this).find('button').attr('name') == 'recover-pass-btn'){
-            recoverPass(formData);
-        }
+
+        //if ($(this).find('button').attr('name') == 'sign-up'){
+        //    registerOfUser(formData);
+        //}
+        //
+        //if ($(this).find('button').attr('name') == 'sign-in'){
+        //    authOfUser(formData);
+        //}
+        //
+        //if ($(this).find('button').attr('name') == 'recover-pass-btn'){
+        //    recoverPass(formData);
+        //}
 
 
 
@@ -257,6 +306,9 @@ $(document).ready(function () {
 
         });
     });
+
+
+
 
 });
 

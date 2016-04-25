@@ -1116,6 +1116,28 @@ textarea {
     margin-left: 0%;
   }
 }
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../fonts/glyphicons-halflings-regular.eot');
+  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.glyphicon-pencil:before {
+  content: "\270f";
+}
+.glyphicon-trash:before {
+  content: "\e020";
+}
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1135,7 +1157,8 @@ body {
   font-weight: 400;
   font-size: 14px;
   color: #000000;
-  padding-top: 60px;
+  padding-top: 70px;
+  min-width: 320px;
 }
 a {
   text-decoration: none;
@@ -1166,16 +1189,25 @@ button:active,
 a.btn {
   display: inline-block;
 }
-input {
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+input,
+textarea {
   width: 100%;
-  background-color: #ffffff;
-  border: 1px solid #bbb;
-  display: inline-block;
-  line-height: 36px;
   padding: 0 10px 2px 10px;
   margin-bottom: 10px;
+  border: 1px solid #bbb;
+  background-color: #ffffff;
   color: #555555;
   border-radius: 4px;
+}
+input {
+  line-height: 36px;
+}
+textarea {
+  padding: 10px;
 }
 header {
   width: 100%;
@@ -1242,8 +1274,6 @@ header button {
   flex-direction: column;
 }
 .authentication form label {
-  display: block;
-  margin-bottom: 5px;
   line-height: 20px;
 }
 .authentication form label span {
@@ -1269,7 +1299,7 @@ header button {
   display: inline-block;
   margin-top: 50px;
 }
-#invalid-message {
+.invalid-message {
   width: 100%;
   position: absolute;
   left: 0;
@@ -1283,4 +1313,91 @@ header button {
 }
 .after-action .btn {
   margin-top: 30px;
+}
+.section-content {
+  margin: 50px 0;
+}
+.section-content .task-list {
+  overflow: hidden;
+  border: 2px solid #bbb;
+  margin-top: 20px;
+  min-height: 250px;
+}
+.section-content .task {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+.section-content .task .column {
+  padding: 10px 10px;
+}
+.section-content .task .number {
+  min-width: 50px;
+  max-width: 100px;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-basis: 20px;
+  -ms-flex-preferred-size: 20px;
+  flex-basis: 20px;
+}
+.section-content .task .content {
+  min-width: 150px;
+  -webkit-box-flex: 3;
+  -webkit-flex-grow: 3;
+  -ms-flex-positive: 3;
+  flex-grow: 3;
+  -webkit-flex-basis: 20px;
+  -ms-flex-preferred-size: 20px;
+  flex-basis: 20px;
+}
+.section-content .task .content .title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.section-content .task .control {
+  min-width: 80px;
+  max-width: 200px;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+.section-content .task .control span {
+  font-size: 20px;
+  color: #bbb;
+  cursor: pointer;
+  margin-right: 15px;
+  padding-top: 5px;
+}
+.section-content .task .control span:last-child {
+  margin-right: 0;
+}
+.section-content .task .control span:hover {
+  color: #008f63;
+}
+.section-content .head {
+  width: 100%;
+  background-color: rgba(187, 187, 187, 0.5);
+}
+.section-content .head div {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.add-task form {
+  padding: 10px;
+  overflow: hidden;
+}
+.add-task form textarea {
+  height: 150px;
+  resize: none;
+}
+.add-task form button {
+  float: right;
 }
