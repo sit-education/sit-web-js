@@ -1165,6 +1165,7 @@ a {
 }
 button,
 .btn {
+  display: inline-block;
   line-height: 38px;
   padding: 0 10px 0 10px;
   background: #008f73;
@@ -1317,13 +1318,20 @@ header button {
 .section-content {
   margin: 50px 0;
 }
+.section-content .btn {
+  width: 90px;
+  text-align: center;
+}
+.section-content .task-list.fill-task {
+  border: 2px solid #bbb;
+}
 .section-content .task-list {
   overflow: hidden;
-  border: 2px solid #bbb;
   margin-top: 20px;
   min-height: 250px;
 }
-.section-content .task {
+.section-content .task,
+.section-content .head {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1332,10 +1340,14 @@ header button {
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
 }
-.section-content .task .column {
+.section-content .task .column,
+.section-content .head .column {
   padding: 10px 10px;
 }
-.section-content .task .number {
+.section-content .task .id,
+.section-content .head .id,
+.section-content .task .number,
+.section-content .head .number {
   min-width: 50px;
   max-width: 100px;
   -webkit-box-flex: 1;
@@ -1346,7 +1358,10 @@ header button {
   -ms-flex-preferred-size: 20px;
   flex-basis: 20px;
 }
-.section-content .task .content {
+.section-content .task .title,
+.section-content .head .title,
+.section-content .task .content,
+.section-content .head .content {
   min-width: 150px;
   -webkit-box-flex: 3;
   -webkit-flex-grow: 3;
@@ -1356,12 +1371,10 @@ header button {
   -ms-flex-preferred-size: 20px;
   flex-basis: 20px;
 }
-.section-content .task .content .title {
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-.section-content .task .control {
+.section-content .task .option,
+.section-content .head .option,
+.section-content .task .control,
+.section-content .head .control {
   min-width: 80px;
   max-width: 200px;
   -webkit-box-flex: 1;
@@ -1369,35 +1382,72 @@ header button {
   -ms-flex-positive: 1;
   flex-grow: 1;
 }
-.section-content .task .control span {
+.head {
+  background-color: #008f73;
+  color: #fff;
+  margin-bottom: 15px;
+}
+.head .column {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.task {
+  padding-bottom: 20px;
+  background-color: #fff;
+}
+.task:nth-child(2n) {
+  background-color: #eae8e8;
+}
+.task:last-child {
+  border-bottom: 2px solid #eae8e8;
+}
+.task .number {
+  font-weight: 600;
+}
+.task .content span {
+  display: block;
+}
+.task .content .title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.task .control span,
+.task .control a {
   font-size: 20px;
   color: #bbb;
   cursor: pointer;
   margin-right: 15px;
   padding-top: 5px;
 }
-.section-content .task .control span:last-child {
+.task .control span:last-child,
+.task .control a:last-child {
   margin-right: 0;
 }
-.section-content .task .control span:hover {
+.task .control span:hover,
+.task .control a:hover {
   color: #008f63;
 }
-.section-content .head {
+.task .head {
   width: 100%;
   background-color: rgba(187, 187, 187, 0.5);
 }
-.section-content .head div {
+.task .head div {
   font-weight: bold;
   text-transform: uppercase;
 }
-.add-task form {
+.fill-task form {
   padding: 10px;
   overflow: hidden;
 }
-.add-task form textarea {
+.fill-task form textarea {
   height: 150px;
   resize: none;
 }
-.add-task form button {
+.fill-task form button {
   float: right;
+}
+#edit-task-section,
+#add-task-section {
+  display: none;
 }

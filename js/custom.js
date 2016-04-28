@@ -3,6 +3,8 @@ $(document).ready(function () {
 
     var TOKEN_NAME = 'access-token';
     var SOME_ERROR = 'Something was wrong. Please try later';
+    var jsonTaskData = 0;
+    var taskId = 0;
 
     $('form button').prop('disabled', false);
 
@@ -40,11 +42,21 @@ $(document).ready(function () {
 
     var accessToken = getValueFromCookie(TOKEN_NAME);
 
-    //if (accessToken == 'tickets.html'){
-    //    if(!(accessToken)){
-    //        window.location.href = 'index.html';
-    //    }
-    //}
+    if (currentPage == 'tickets.html'){
+        if(!(accessToken)){
+            window.location.href = 'index.html';
+        }
+
+        getTask();
+
+
+    }
+
+
+
+
+
+
 
 
 
@@ -171,15 +183,169 @@ $(document).ready(function () {
     }
 
 
+    function getTask(){
+         $.ajax({
+            type: 'GET',
+            url: 'https://sit-todo-test.appspot.com/api/v1/items',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token-Key': accessToken
+            },
+            success: function (data) {
+                if(data.status){
+                    var arrOfTasks = data.data.todoData;
+                    arrOfTasks.forEach(function(item, i){
+                        var dictionaryTask = {};
+                        dictionaryTask = arrOfTasks[i];
+                        $('.task').remove();
+                        $('#tasks-list-section .task-list').append(
+                            '<div class="task">' +
+                                '<div class="column number">'+ (++i) +'</div>'+
+                                '<div class="column content">' +
+                                    '<span class="title">'+ dictionaryTask.title +'</span>'+
+                                    '<span class="description">'+ dictionaryTask.description +'</span>'+
+                                '</div>'+
+                                '<div class="column control">' +
+                                    '<span class="edit glyphicon glyphicon-pencil"></span>'+
+                                    '<span class="delete glyphicon glyphicon-trash"></span>'+
+                            '   </div>'+
+                            '</div>'
+                        );
+
+                    });
+                    var allTasksDom = $('.task-list');
+                    successTaskList(arrOfTasks, allTasksDom);
+
+                }else{
+                    $('form button').before('<span class="invalid-message">'+ SOME_ERROR +'</span>');
+                    console.log(data);
+                }
+            },
+            error: function(error){
+                identifyErrorAnswer(error);
+            }
+        });
+    }
+
+    function successTaskList(arrOfTasks, allTasksDom){
+        var activeItemValue = 0;
+        var jsonTaskData = '';
+
+        $('.new-task').on('click', function(){
+            $('.new-task').prop('disabled', true);
+            $('#edit-task-section').remove();
+            $('#tasks-list-section').fadeOut(0, function(){
+                $('#add-task-section').fadeIn();
+            });
+        });
+
+
+        $('.task-list').on('click', '.delete', function (){
+            $('.delete').prop('disabled', true);
+            var activeTaskDom = $(this).parents('.task');
+            activeItemValue = $(activeTaskDom).find('.number').text();
+            taskId = arrOfTasks[activeItemValue-1].id;
+
+            deleteTask(taskId, activeTaskDom);
+            arrOfTasks.splice(activeItemValue-1,1);
+            updateTaskNumber(allTasksDom);
+        });
+
+        $('.task-list').on('click', '.edit', function(){
+            $('.edit').prop('disabled', true);
+            $('#tasks-list-section').fadeOut(0, function(){
+                $('#edit-task-section').fadeIn();
+            });
+
+            var activeTaskDom = $(this).parents('.task');
+            activeItemValue = $(activeTaskDom).find('.number').text();
+            var currentObjFromArr = {};
+            currentObjFromArr = arrOfTasks[activeItemValue-1];
+            taskId = currentObjFromArr.id;
+            jsonTaskData =  getTaskDataForEdit(currentObjFromArr);
+            $('#editTitle').val(currentObjFromArr.title);
+            $('#editDesc').val(currentObjFromArr.description);
+        });
+
+
+    }
+
+    function getTaskDataForEdit(currentObjFromArr){
+        delete currentObjFromArr.id;
+        jsonTaskData = JSON.stringify(currentObjFromArr);
+        return jsonTaskData;
+    }
+
+    function updateTaskNumber(allTasksDom){
+        setTimeout(function(){
+            $('.delete').prop('disabled', false);
+            $(allTasksDom).find('.number').each(function(index){
+                index++;
+                $(this).text(index);
+            });
+        },1300)
+    }
+
+
+
+    function editTask(editFormData, taskId){
+        $.ajax({
+            type: 'PUT',
+            url: 'https://sit-todo-test.appspot.com/api/v1/item/' + taskId,
+            headers: {
+                'Content-Type': 'application/json',
+                'Token-Key': accessToken
+            },
+            data: editFormData,
+            success: function(data){
+                if(data.status){
+                    window.location.href = 'tickets.html';
+                }else{
+                    $('form button').before('<span class="invalid-message">'+ SOME_ERROR +'</span>');
+                    console.log(data);
+                }
+            },
+            error: function(error){
+                identifyErrorAnswer(error);
+            }
+        });
+    }
+
+    function deleteTask(taskId, activeTaskDom){
+        $.ajax({
+            type: 'DELETE',
+            url: 'https://sit-todo-test.appspot.com/api/v1/item/' + taskId,
+            headers: {
+                'Content-Type': 'application/json',
+                'Token-Key': accessToken
+            },
+            success: function(data){
+                if(data.status){
+                    $(activeTaskDom).fadeOut(400, function(){
+                        $(this).remove();
+                    });
+
+                }else{
+                    $('form button').before('<span class="invalid-message">'+ SOME_ERROR +'</span>');
+                    console.log(data);
+                }
+            },
+            error: function(error){
+                identifyErrorAnswer(error);
+            }
+        });
+    }
+
 
     $('form').on('submit', function (event) {
         event.preventDefault();
         var idForm = $(this).attr('id');
+        alert(idForm);
         $(this).find('button').prop('disabled', true);
         $('.invalid-message').remove();
         var formData = 0;
         var objFormData = {};
-        var name = 0;
+        var name = '';
         $('input, textarea').each(function () {
             name = $(this).attr('name');
             objFormData[name] = $(this).val();
@@ -202,6 +368,10 @@ $(document).ready(function () {
 
             case 'add-task':
                 addTask(formData);
+                break;
+
+            case 'edit-task':
+                editTask(formData, taskId);
                 break;
         }
 
