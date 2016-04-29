@@ -1436,6 +1436,19 @@ header button {
   font-weight: bold;
   text-transform: uppercase;
 }
+.note {
+  background-color: transparent;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  padding-bottom: 0;
+}
+.note h2 {
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
 .fill-task form {
   padding: 10px;
   overflow: hidden;

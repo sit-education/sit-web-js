@@ -46,13 +46,8 @@ $(document).ready(function () {
         if(!(accessToken)){
             window.location.href = 'index.html';
         }
-
         getTask();
-
-
     }
-
-
 
 
 
@@ -182,7 +177,6 @@ $(document).ready(function () {
         });
     }
 
-
     function getTask(){
          $.ajax({
             type: 'GET',
@@ -194,28 +188,36 @@ $(document).ready(function () {
             success: function (data) {
                 if(data.status){
                     var arrOfTasks = data.data.todoData;
-                    arrOfTasks.forEach(function(item, i){
-                        var dictionaryTask = {};
-                        dictionaryTask = arrOfTasks[i];
-                        $('.task').remove();
+                    $('.task').remove();
+                    if(arrOfTasks.length){
+                        arrOfTasks.forEach(function(item, i){
+                            var dictionaryTask = {};
+                            dictionaryTask = arrOfTasks[i];
+                            $('#tasks-list-section .task-list').append(
+                                '<div class="task">' +
+                                    '<div class="column number">'+ (++i) +'</div>'+
+                                    '<div class="column content">' +
+                                        '<span class="title">'+ dictionaryTask.title +'</span>'+
+                                        '<span class="description">'+ dictionaryTask.description +'</span>'+
+                                    '</div>'+
+                                    '<div class="column control">' +
+                                        '<span class="edit glyphicon glyphicon-pencil"></span>'+
+                                        '<span class="delete glyphicon glyphicon-trash"></span>'+
+                                '   </div>'+
+                                '</div>'
+                            );
+                        });
+
+                    }else{
                         $('#tasks-list-section .task-list').append(
-                            '<div class="task">' +
-                                '<div class="column number">'+ (++i) +'</div>'+
-                                '<div class="column content">' +
-                                    '<span class="title">'+ dictionaryTask.title +'</span>'+
-                                    '<span class="description">'+ dictionaryTask.description +'</span>'+
-                                '</div>'+
-                                '<div class="column control">' +
-                                    '<span class="edit glyphicon glyphicon-pencil"></span>'+
-                                    '<span class="delete glyphicon glyphicon-trash"></span>'+
-                            '   </div>'+
+                            '<div class="task note">'+
+                                '<h2>You haven\'t any tasks yet</h2>'+
                             '</div>'
                         );
+                    }
 
-                    });
                     var allTasksDom = $('.task-list');
                     successTaskList(arrOfTasks, allTasksDom);
-
                 }else{
                     $('form button').before('<span class="invalid-message">'+ SOME_ERROR +'</span>');
                     console.log(data);
@@ -224,6 +226,7 @@ $(document).ready(function () {
             error: function(error){
                 identifyErrorAnswer(error);
             }
+
         });
     }
 
@@ -238,7 +241,6 @@ $(document).ready(function () {
                 $('#add-task-section').fadeIn();
             });
         });
-
 
         $('.task-list').on('click', '.delete', function (){
             $('.delete').prop('disabled', true);
@@ -266,7 +268,6 @@ $(document).ready(function () {
             $('#editTitle').val(currentObjFromArr.title);
             $('#editDesc').val(currentObjFromArr.description);
         });
-
 
     }
 
