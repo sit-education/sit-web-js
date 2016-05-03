@@ -1319,7 +1319,7 @@ header button {
   margin: 50px 0;
 }
 .section-content .btn {
-  width: 90px;
+  width: 95px;
   text-align: center;
 }
 .section-content .task-list.fill-task {
@@ -1392,6 +1392,7 @@ header button {
   text-transform: uppercase;
 }
 .task {
+  opacity: 0;
   padding-bottom: 20px;
   background-color: #fff;
 }

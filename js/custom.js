@@ -1,6 +1,7 @@
 'use strict';
 $(document).ready(function () {
 
+    var URI ='https://sit-todo-test.appspot.com/api/v1/';
     var TOKEN_NAME = 'access-token';
     var SOME_ERROR = 'Something was wrong. Please try later';
     var jsonTaskData = 0;
@@ -83,7 +84,7 @@ $(document).ready(function () {
     function authOfUser(userFormData){
         $.ajax({
             type: 'POST',
-            url: 'https://sit-todo-test.appspot.com/api/v1/login',
+            url: URI + 'login',
             data: userFormData,
             contentType: 'application/json',
             success: function(data){
@@ -111,7 +112,7 @@ $(document).ready(function () {
     function registerOfUser(registerFormData) {
         $.ajax({
             type: 'POST',
-            url: 'https://sit-todo-test.appspot.com/api/v1/signup',
+            url: URI + 'signup',
             data: registerFormData,
             contentType: 'application/json',
             success: function (data) {
@@ -134,7 +135,7 @@ $(document).ready(function () {
     function recoverPass(recoverFormData){
         $.ajax({
             type: 'POST',
-            url: 'https://sit-todo-test.appspot.com/api/v1/restorePassword',
+            url: URI + 'restorePassword',
             data: recoverFormData,
             headers: {
                 'Content-Type':'application/json'
@@ -157,7 +158,7 @@ $(document).ready(function () {
     function addTask(addTaskFormData){
         $.ajax({
             type: 'POST',
-            url: 'https://sit-todo-test.appspot.com/api/v1/item',
+            url: URI + 'item',
             headers: {
                 'Content-Type': 'application/json',
                 'Token-Key': accessToken
@@ -180,7 +181,7 @@ $(document).ready(function () {
     function getTask(){
          $.ajax({
             type: 'GET',
-            url: 'https://sit-todo-test.appspot.com/api/v1/items',
+            url: URI + 'items',
             headers: {
                 'Content-Type': 'application/json',
                 'Token-Key': accessToken
@@ -206,6 +207,7 @@ $(document).ready(function () {
                                 '   </div>'+
                                 '</div>'
                             );
+                            $('.task').fadeTo(700, 1);
                         });
 
                     }else{
@@ -292,7 +294,7 @@ $(document).ready(function () {
     function editTask(editFormData, taskId){
         $.ajax({
             type: 'PUT',
-            url: 'https://sit-todo-test.appspot.com/api/v1/item/' + taskId,
+            url: URI + 'item/' + taskId,
             headers: {
                 'Content-Type': 'application/json',
                 'Token-Key': accessToken
@@ -315,7 +317,7 @@ $(document).ready(function () {
     function deleteTask(taskId, activeTaskDom){
         $.ajax({
             type: 'DELETE',
-            url: 'https://sit-todo-test.appspot.com/api/v1/item/' + taskId,
+            url: URI + 'item/' + taskId,
             headers: {
                 'Content-Type': 'application/json',
                 'Token-Key': accessToken
@@ -455,7 +457,7 @@ $(document).ready(function () {
     $('#logout-btn').on('click', function(){
         $.ajax({
             type: 'POST',
-            url: 'https://sit-todo-test.appspot.com/api/v1/logout',
+            url: URI + 'logout',
             headers: {
                 'Token-Key': accessToken,
                 'Content-Type':'application/json'
