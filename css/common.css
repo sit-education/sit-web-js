@@ -1392,7 +1392,6 @@ header button {
   text-transform: uppercase;
 }
 .task {
-  opacity: 0;
   padding-bottom: 20px;
   background-color: #fff;
 }
