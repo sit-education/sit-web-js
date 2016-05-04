@@ -9,10 +9,27 @@ $(document).ready(function () {
 
     $('form button').prop('disabled', false);
 
-    var arrPagePath = [];
-    var currentPage = window.location.pathname;
-    arrPagePath = currentPage.split('/');
-    currentPage = arrPagePath[arrPagePath.length - 1];
+    var currentPage = getCurrentPage();
+
+    if (currentPage == 'tickets.html') {
+        var accessToken = getValueFromCookie(TOKEN_NAME);
+
+        if (!(accessToken)) {
+            window.location.href = 'index.html';
+        }
+
+        getTask();
+        //setInterval(getTask, 10000);
+    }
+
+    function getCurrentPage(){
+        var arrPagePath = [];
+
+        var currentPage = window.location.pathname;
+        arrPagePath = currentPage.split('/');
+        currentPage = arrPagePath[arrPagePath.length - 1];
+        return currentPage;
+    }
 
     function getValueFromCookie(nameOfCookie) {
         var arrCookies = [];
@@ -29,8 +46,8 @@ $(document).ready(function () {
         for (var i = 0; i < arrCookies.length; i++) {
             oneCookie = arrCookies[i].split('=');
             dictionaryCookies[oneCookie[0]] = oneCookie[1];
-
         }
+
         if (dictionaryCookies[nameOfCookie]) {
             return dictionaryCookies[nameOfCookie];
         } else {
@@ -38,18 +55,6 @@ $(document).ready(function () {
         }
 
     }
-
-
-    var accessToken = getValueFromCookie(TOKEN_NAME);
-
-    if (currentPage == 'tickets.html') {
-        if (!(accessToken)) {
-            window.location.href = 'index.html';
-        }
-        getTask();
-        //setInterval(getTask, 10000);
-    }
-
 
     function identifyErrorAnswer(error) {
         if (!(error.status)) {
@@ -175,35 +180,27 @@ $(document).ready(function () {
                 if (data.status) {
                     $('.task').remove();
                     var arrOfTasks = data.data.todoData;
-                    if (arrOfTasks.length) {
-                        arrOfTasks.forEach(function (item, i) {
-                            var dictionaryTask = {};
-                            dictionaryTask = arrOfTasks[i];
-                            $('#tasks-list-section .task-list').append(
-                                '<div class="task">' +
-                                    '<div class="column number">' + (++i) + '</div>' +
-                                '<div class="column content">' +
-                                    '<span class="title">' + dictionaryTask.title + '</span>' +
-                                    '<span class="description">' + dictionaryTask.description + '</span>' +
-                                '</div>' +
-                                '<div class="column control">' +
-                                    '<span class="edit glyphicon glyphicon-pencil"></span>' +
-                                    '<span class="delete glyphicon glyphicon-trash"></span>' +
-                                '   </div>' +
-                                '</div>'
-                            );
-                        });
-
-                    } else {
+                    if (!(arrOfTasks.length)) {
+                        addNoticeEmptyList();
+                    }
+                    arrOfTasks.forEach(function (item, i) {
+                        var dictionaryTask = {};
+                        dictionaryTask = arrOfTasks[i];
                         $('#tasks-list-section .task-list').append(
-                            '<div class="task note">' +
-                                '<h2>You haven\'t any tasks yet</h2>' +
+                            '<div class="task" data-id=' + dictionaryTask.id + '>' +
+                            '<div class="column number">' + (++i) + '</div>' +
+                            '<div class="column content">' +
+                            '<span class="title">' + dictionaryTask.title + '</span>' +
+                            '<span class="description">' + dictionaryTask.description + '</span>' +
+                            '</div>' +
+                            '<div class="column control">' +
+                            '<span class="edit ico ico-pencil"></span>' +
+                            '<span class="delete ico ico-trash"></span>' +
+                            '   </div>' +
                             '</div>'
                         );
-                    }
+                    });
 
-                    var allTasksDom = $('.task-list');
-                    successTaskList(arrOfTasks, allTasksDom);
                 } else {
                     $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
                     console.log(data);
@@ -217,62 +214,80 @@ $(document).ready(function () {
 
     }
 
-    function successTaskList(arrOfTasks, allTasksDom) {
-        var activeItemValue = 0;
-        var jsonTaskData = '';
+    $('.new-task').on('click', function () {
 
-        $('.new-task').on('click', function () {
-            $('.new-task').prop('disabled', true);
-            $('#tasks-list-section').fadeOut(0, function () {
-                $('#add-task-section').fadeIn();
+        $('#tasks-list-section').fadeOut(0, function () {
+            $('#add-task-section').fadeIn();
+        });
+    });
+
+    $('.back-to-list').on('click', function () {
+        var activeSection = $(this).closest('section');
+        $(activeSection).fadeOut(0, function () {
+            $('#tasks-list-section').fadeIn();
+            $(activeSection).find('input, textarea').each(function () {
+                $(this).val('');
             });
         });
+    });
 
-        $('.task-list').on('click', '.delete', function () {
-            $('.delete').prop('disabled', true);
-            var activeTaskDom = $(this).parents('.task');
-            activeItemValue = $(activeTaskDom).find('.number').text();
-            taskId = arrOfTasks[activeItemValue - 1].id;
+    $('.task-list').on('click', '.delete', function () {
+        $('.delete').prop('disabled', true);
+        var activeTask = {};
+        var taskId = 0;
+        var accessToken = '';
 
-            deleteTask(taskId, activeTaskDom);
-            arrOfTasks.splice(activeItemValue - 1, 1);
-            updateTaskNumber(allTasksDom);
-        });
+        activeTask = ($(this).closest('.task'));
+        taskId = $(activeTask).attr('data-id');
+        accessToken = getValueFromCookie(TOKEN_NAME);
+        deleteTask(taskId, accessToken, activeTask);
+    });
 
-        $('.task-list').on('click', '.edit', function () {
-            $('.edit').prop('disabled', true);
-            $('#tasks-list-section').fadeOut(0, function () {
-                $('#edit-task-section').fadeIn();
+
+    $('.task-list').on('click', '.edit', function () {
+        var activeTask = {};
+        var formData = {};
+        var taskId = 0;
+        var accessToken = '';
+        var title = '';
+        var description = '';
+
+        activeTask = ($(this).closest('.task'));
+        taskId = $(activeTask).attr('data-id');
+        accessToken = getValueFromCookie(TOKEN_NAME);
+        title = $(activeTask).find('.content .title').text();
+        description = $(activeTask).find('.content .description').text();
+
+        $('#tasks-list-section').fadeOut(0, function () {
+            $('#editTitle').val(title);
+            $('#editDesc').val(description);
+            $('#edit-task-section').fadeIn(function () {
+                $('#edit-task').attr('data-id', taskId);
             });
-
-            var activeTaskDom = $(this).parents('.task');
-            activeItemValue = $(activeTaskDom).find('.number').text();
-            var currentObjFromArr = {};
-            currentObjFromArr = arrOfTasks[activeItemValue - 1];
-            taskId = currentObjFromArr.id;
-            jsonTaskData = getTaskDataForEdit(currentObjFromArr);
-            $('#editTitle').val(currentObjFromArr.title);
-            $('#editDesc').val(currentObjFromArr.description);
         });
+    });
 
-    }
-
-    function getTaskDataForEdit(currentObjFromArr) {
-        delete currentObjFromArr.id;
-        jsonTaskData = JSON.stringify(currentObjFromArr);
-        return jsonTaskData;
-    }
-
-    function updateTaskNumber(allTasksDom) {
-        setTimeout(function () {
-            $('.delete').prop('disabled', false);
-            $(allTasksDom).find('.number').each(function (index) {
+    function updateTaskNumber() {
+        var taskNumber = $('.task-list').find('.number');
+        if (taskNumber.length) {
+            $('.task-list').find('.number').each(function (index) {
                 index++;
                 $(this).text(index);
             });
-        }, 1300)
+            $('.delete').prop('disabled', false);
+        } else {
+            addNoticeEmptyList();
+        }
+
     }
 
+    function addNoticeEmptyList() {
+        $('#tasks-list-section .task-list').append(
+            '<div class="task note">' +
+            '<h2>This list is empty. Please add the new task.</h2>' +
+            '</div>'
+        );
+    }
 
     function editTask(editFormData, taskId) {
         $.ajax({
@@ -297,7 +312,7 @@ $(document).ready(function () {
         });
     }
 
-    function deleteTask(taskId, activeTaskDom) {
+    function deleteTask(taskId, accessToken, activeTask) {
         $.ajax({
             type: 'DELETE',
             url: URI + 'item/' + taskId,
@@ -307,9 +322,11 @@ $(document).ready(function () {
             },
             success: function (data) {
                 if (data.status) {
-                    $(activeTaskDom).fadeOut(400, function () {
+                    $(activeTask).fadeOut(400, function () {
                         $(this).remove();
+                        updateTaskNumber();
                     });
+
 
                 } else {
                     $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
@@ -326,9 +343,10 @@ $(document).ready(function () {
     $('form').on('submit', function (event) {
         event.preventDefault();
         var idForm = $(this).attr('id');
+        var taskId = $(this).attr('data-id');
         $(this).find('button').prop('disabled', true);
         $('.invalid-message').remove();
-        var formData = 0;
+        var formData = '';
         var objFormData = {};
         var name = '';
         $(this).find('input, textarea').each(function () {

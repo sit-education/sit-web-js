@@ -1121,7 +1121,7 @@ textarea {
   src: url('../fonts/glyphicons-halflings-regular.eot');
   src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
-.glyphicon {
+.ico {
   position: relative;
   top: 1px;
   display: inline-block;
@@ -1132,10 +1132,10 @@ textarea {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.glyphicon-pencil:before {
+.ico-pencil:before {
   content: "\270f";
 }
-.glyphicon-trash:before {
+.ico-trash:before {
   content: "\e020";
 }
 * {
@@ -1339,10 +1339,11 @@ header button {
   -webkit-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
+  padding: 10px 0;
 }
 .section-content .task .column,
 .section-content .head .column {
-  padding: 10px 10px;
+  padding: 0 10px;
 }
 .section-content .task .id,
 .section-content .head .id,
@@ -1382,58 +1383,50 @@ header button {
   -ms-flex-positive: 1;
   flex-grow: 1;
 }
-.head {
-  background-color: #008f73;
-  color: #fff;
-  margin-bottom: 15px;
-}
-.head .column {
-  font-weight: 600;
-  text-transform: uppercase;
-}
-.task {
-  padding-bottom: 20px;
+.section-content .task {
   background-color: #fff;
+  padding-bottom: 30px;
 }
-.task:nth-child(2n) {
+.section-content .task:nth-child(2n) {
   background-color: #eae8e8;
 }
-.task:last-child {
+.section-content .task:last-child {
   border-bottom: 2px solid #eae8e8;
 }
-.task .number {
+.section-content .task .number {
   font-weight: 600;
 }
-.task .content span {
+.section-content .task .content span {
   display: block;
 }
-.task .content .title {
+.section-content .task .content .title {
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 10px;
 }
-.task .control span,
-.task .control a {
+.section-content .task .control span,
+.section-content .task .control a {
   font-size: 20px;
   color: #bbb;
   cursor: pointer;
   margin-right: 15px;
   padding-top: 5px;
 }
-.task .control span:last-child,
-.task .control a:last-child {
+.section-content .task .control span:last-child,
+.section-content .task .control a:last-child {
   margin-right: 0;
 }
-.task .control span:hover,
-.task .control a:hover {
+.section-content .task .control span:hover,
+.section-content .task .control a:hover {
   color: #008f63;
 }
-.task .head {
-  width: 100%;
-  background-color: rgba(187, 187, 187, 0.5);
+.section-content .head {
+  background-color: #008f73;
+  color: #fff;
+  margin-bottom: 15px;
 }
-.task .head div {
-  font-weight: bold;
+.section-content .head .column {
+  font-weight: 600;
   text-transform: uppercase;
 }
 .note {
@@ -1445,9 +1438,9 @@ header button {
   padding-bottom: 0;
 }
 .note h2 {
-  -webkit-align-self: center;
-  -ms-flex-item-align: center;
-  align-self: center;
+  text-align: center;
+  padding: 0 10px;
+  margin: 50px 0;
 }
 .fill-task form {
   padding: 10px;
@@ -1463,8 +1456,4 @@ header button {
 #edit-task-section,
 #add-task-section {
   display: none;
-}
-#edit-task-section.active,
-#add-task-section.active {
-  display: block;
 }
