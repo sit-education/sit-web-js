@@ -57,7 +57,7 @@ $(document).ready(function () {
     }
 
     function identifyErrorAnswer(error) {
-        if (!(error.status)) {
+        if (error.status) {
             var response = 0;
             var totalErrorResponse = 0;
             response = JSON.parse(error.responseText);
