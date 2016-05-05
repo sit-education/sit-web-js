@@ -1511,6 +1511,14 @@ header button {
 .fill-task form textarea {
   height: 150px;
   resize: none;
+  margin-bottom: 5px;
+}
+.fill-task form .subscribe {
+  display: block;
+  font-size: 12px;
+  color: #bbb;
+  font-style: italic;
+  margin-bottom: 10px;
 }
 .fill-task form button {
   float: right;
