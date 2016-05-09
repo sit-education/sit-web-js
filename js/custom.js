@@ -3,7 +3,9 @@ $(document).ready(function () {
 
     var URI = 'https://sit-todo-test.appspot.com/api/v1/';
     var TOKEN_NAME = 'access-token';
-    var SOME_ERROR = 'Sorry, unexpected error. Please try later';
+    var SOME_ERROR = 'You have been disconnected';
+    var DISCONNECT_ERROR = 'You have been disconnected';
+    var INVALID_TOKEN = 'invalid_token';
     var jsonTaskData = 0;
     var taskId = 0;
 
@@ -16,8 +18,8 @@ $(document).ready(function () {
 
         if (!(accessToken)) {
             window.location.href = 'index.html';
-        }
 
+        }
         getTask();
         //setInterval(getTask, 10000);
     }
@@ -57,7 +59,6 @@ $(document).ready(function () {
     }
 
     function identifyErrorAnswer(error) {
-        var INVALID_TOKEN = 'invalid_token';
         if(error.status == 500){
             alert(SOME_ERROR);
             window.location.href = 'index.html'
@@ -72,7 +73,8 @@ $(document).ready(function () {
                 };
                 if(response.errors[0].error_key === INVALID_TOKEN) {
                     //$('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
-                    alert('You have been disconnected');
+                    alert(DISCONNECT_ERROR);
+                    document.cookie = TOKEN_NAME + '=; path=/; expires= Thu, 01 Jan 1970 00:00:01 GMT';
                     window.location.href = 'index.html';
                 }else{
                     $('form button').before('<span class="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
@@ -87,6 +89,9 @@ $(document).ready(function () {
             url: URI + 'login',
             data: userFormData,
             contentType: 'application/json',
+            beforeSend: function(){
+                $('body').append('<div id="loader"></div>');
+            },
             success: function (data) {
                 if (data.status) {
                     var accessToken = data.data.tokenKey;
@@ -101,6 +106,9 @@ $(document).ready(function () {
             },
             error: function (error) {
                 identifyErrorAnswer(error);
+            },
+            complete: function () {
+                $('#loader').remove();
             }
         });
         setTimeout(function () {
@@ -198,9 +206,9 @@ $(document).ready(function () {
                 'Content-Type': 'application/json',
                 'Token-Key': accessToken
             },
-            beforeSend: function(){
-                $('body').append('<div id="loader"></div>');
-            },
+            //beforeSend: function(){
+            //    $('body').append('<div id="loader"></div>');
+            //},
             success: function (data) {
                 if (data.status) {
                     $('.task').remove();
@@ -233,10 +241,10 @@ $(document).ready(function () {
             },
             error: function (error) {
                 identifyErrorAnswer(error);
-            },
-            complete: function () {
-                $('#loader').remove();
             }
+            //complete: function () {
+            //    $('#loader').remove();
+            //}
 
         });
 
@@ -428,7 +436,30 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
-                identifyErrorAnswer(error);
+                if(error.status == 500){
+                    alert(SOME_ERROR);
+                    window.location.href = 'index.html'
+                }else{
+                    if (error.status) {
+                        var totalErrorResponse = {};
+                        var response = {};
+                        response = JSON.parse(error.responseText);
+                        totalErrorResponse = {
+                            status: response.status,
+                            errorMessage: response.errors[0].error_message
+                        };
+                        if(response.errors[0].error_key === INVALID_TOKEN) {
+                            //$('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                            document.cookie = TOKEN_NAME + '=; path=/; expires= Thu, 01 Jan 1970 00:00:01 GMT';
+                            window.location.href = 'index.html';
+                        }else{
+                            $('form button').before('<span class="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
+                        }
+                    }
+                }
+
+
+
             }
 
 
