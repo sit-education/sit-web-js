@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     var URI = 'https://sit-todo-test.appspot.com/api/v1/';
     var TOKEN_NAME = 'access-token';
-    var SOME_ERROR = 'Sorry, unexpected error';
+    var SOME_ERROR = 'Sorry, unexpected error. Please try later';
     var jsonTaskData = 0;
     var taskId = 0;
 
