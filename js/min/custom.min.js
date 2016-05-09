@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     var URI = 'https://sit-todo-test.appspot.com/api/v1/';
     var TOKEN_NAME = 'access-token';
-    var SOME_ERROR = 'Something was wrong. Please try later';
+    var SOME_ERROR = 'Sorry, unexpected error';
     var jsonTaskData = 0;
     var taskId = 0;
 
@@ -57,17 +57,27 @@ $(document).ready(function () {
     }
 
     function identifyErrorAnswer(error) {
-        if (error.status) {
-            var response = 0;
-            var totalErrorResponse = 0;
-            response = JSON.parse(error.responseText);
-            totalErrorResponse = {
-                status: response.status,
-                errorMessage: response.errors[0].error_message
-            };
-            $('form button').before('<span class="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
-        } else {
-            $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+        var INVALID_TOKEN = 'invalid_token';
+        if(error.status == 500){
+            alert(SOME_ERROR);
+            window.location.href = 'index.html'
+        }else{
+            if (error.status) {
+                var totalErrorResponse = {};
+                var response = {};
+                response = JSON.parse(error.responseText);
+                totalErrorResponse = {
+                    status: response.status,
+                    errorMessage: response.errors[0].error_message
+                };
+                if(response.errors[0].error_key === INVALID_TOKEN) {
+                    //$('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                    alert('You have been disconnected');
+                    window.location.href = 'index.html';
+                }else{
+                    $('form button').before('<span class="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
+                }
+            }
         }
     }
 
@@ -418,8 +428,7 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
-                alert('Sorry an error occurred on server');
-                console.log(error);
+                identifyErrorAnswer(error);
             }
 
 
