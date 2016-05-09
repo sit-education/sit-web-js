@@ -3,8 +3,9 @@ $(document).ready(function () {
 
     var URI = 'https://sit-todo-test.appspot.com/api/v1/';
     var TOKEN_NAME = 'access-token';
-    var SOME_ERROR = 'You have been disconnected';
-    var DISCONNECT_ERROR = 'You have been disconnected';
+    var MSG_SOME_ERROR = 'Sorry, unexpected error. Please try later';
+    var MSG_DISCONNECT_ERROR = 'You have been disconnected';
+    var MSG_DELETED_ACCOUNT = 'Yor account was deleted'
     var INVALID_TOKEN = 'invalid_token';
     var jsonTaskData = 0;
     var taskId = 0;
@@ -59,27 +60,35 @@ $(document).ready(function () {
     }
 
     function identifyErrorAnswer(error) {
-        if(error.status == 500){
-            alert(SOME_ERROR);
-            window.location.href = 'index.html'
-        }else{
-            if (error.status) {
-                var totalErrorResponse = {};
-                var response = {};
-                response = JSON.parse(error.responseText);
-                totalErrorResponse = {
-                    status: response.status,
-                    errorMessage: response.errors[0].error_message
-                };
-                if(response.errors[0].error_key === INVALID_TOKEN) {
-                    //$('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
-                    alert(DISCONNECT_ERROR);
-                    document.cookie = TOKEN_NAME + '=; path=/; expires= Thu, 01 Jan 1970 00:00:01 GMT';
-                    window.location.href = 'index.html';
-                }else{
-                    $('form button').before('<span class="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
+        console.log(error.status);
+        switch (error.status){
+            case 500:
+                alert(MSG_SOME_ERROR);
+                window.location.href = 'index.html';
+                break;
+
+            case 410:
+                alert(MSG_DELETED_ACCOUNT);
+                window.location.href = 'index.html';
+                break;
+
+            default:
+                if (error.status) {
+                    var totalErrorResponse = {};
+                    var response = {};
+                    response = JSON.parse(error.responseText);
+                    totalErrorResponse = {
+                        status: response.status,
+                        errorMessage: response.errors[0].error_message
+                    };
+                    if(response.errors[0].error_key === INVALID_TOKEN) {
+                        alert(MSG_DISCONNECT_ERROR);
+                        document.cookie = TOKEN_NAME + '=; path=/; expires= Thu, 01 Jan 1970 00:00:01 GMT';
+                        window.location.href = 'index.html';
+                    }else{
+                        $('form button').before('<span class="invalid-message">' + totalErrorResponse.errorMessage + '</span>');
+                    }
                 }
-            }
         }
     }
 
@@ -101,7 +110,7 @@ $(document).ready(function () {
                     document.cookie = TOKEN_NAME + '=' + accessToken + '; path=/';
                     window.location.href = 'tickets.html';
                 } else {
-                    $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                    $('form button').before('<span class="invalid-message">' + MSG_SOME_ERROR + '</span>');
                 }
             },
             error: function (error) {
@@ -133,7 +142,7 @@ $(document).ready(function () {
                     });
 
                 } else {
-                    $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                    $('form button').before('<span class="invalid-message">' + MSG_SOME_ERROR + '</span>');
                 }
             },
             error: function (error) {
@@ -163,7 +172,7 @@ $(document).ready(function () {
                         $('.after-action').fadeIn(500);
                     });
                 } else {
-                    $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                    $('form button').before('<span class="invalid-message">' + MSG_SOME_ERROR + '</span>');
                 }
             },
             error: function (error) {
@@ -188,7 +197,7 @@ $(document).ready(function () {
                 if (data.status) {
                     window.location.href = 'tickets.html';
                 } else {
-                    $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                    $('form button').before('<span class="invalid-message">' + MSG_SOME_ERROR + '</span>');
                     console.log(data);
                 }
             },
@@ -235,7 +244,7 @@ $(document).ready(function () {
                     });
 
                 } else {
-                    $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                    $('form button').before('<span class="invalid-message">' + MSG_SOME_ERROR + '</span>');
                     console.log(data);
                 }
             },
@@ -338,7 +347,7 @@ $(document).ready(function () {
                 if (data.status) {
                     window.location.href = 'tickets.html';
                 } else {
-                    $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                    $('form button').before('<span class="invalid-message">' + MSG_SOME_ERROR + '</span>');
                     console.log(data);
                 }
             },
@@ -365,7 +374,7 @@ $(document).ready(function () {
 
 
                 } else {
-                    $('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                    $('form button').before('<span class="invalid-message">' + MSG_SOME_ERROR + '</span>');
                     console.log(data);
                 }
             },
@@ -437,7 +446,7 @@ $(document).ready(function () {
             },
             error: function (error) {
                 if(error.status == 500){
-                    alert(SOME_ERROR);
+                    alert(MSG_SOME_ERROR);
                     window.location.href = 'index.html'
                 }else{
                     if (error.status) {
@@ -449,7 +458,7 @@ $(document).ready(function () {
                             errorMessage: response.errors[0].error_message
                         };
                         if(response.errors[0].error_key === INVALID_TOKEN) {
-                            //$('form button').before('<span class="invalid-message">' + SOME_ERROR + '</span>');
+                            //$('form button').before('<span class="invalid-message">' + MSG_SOME_ERROR + '</span>');
                             document.cookie = TOKEN_NAME + '=; path=/; expires= Thu, 01 Jan 1970 00:00:01 GMT';
                             window.location.href = 'index.html';
                         }else{
