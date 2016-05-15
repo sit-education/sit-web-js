@@ -1,0 +1,24 @@
+<section class="authentication">
+    <div class="container">
+        <h1 class="section-title">Welcome to TODO list</h1>
+        <form id="login" ng-submit="saveDataForm()">
+
+
+            <label for="authUsername"><span>*</span> Username</label>
+            <input type="text" ng-model="formField.login" class="username" name="login" id="authUsername" placeholder="Username" required>
+
+
+            <label for="authPass"><span>*</span> Password</label>
+            <input type="password" ng-model="formField.password" class="password" name="password" id="authPass" placeholder="Password" required>
+
+            <span class="invalid-message">{{error}}</span>
+
+
+            <button type="submit" name="sign-in" ng-disabled="pressed">Sign in</button>
+            <a href="#/signUp"  class="btn" >Sing up</a>
+            <a href="#/reset"  class="btn" >Forgot password?</a>
+
+        </form>
+
+    </div>
+</section>

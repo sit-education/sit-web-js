@@ -1,0 +1,23 @@
+<section class="section-content" id="tasks-list-section">
+    <div class="container">
+        <a href="#/new" class="new-task btn">New task</a>
+        <div class="task-list">
+            <div class=" head">
+                <div class="column id">id</div>
+                <div class="column title">Task</div>
+                <div class="column option">Option</div>
+            </div>
+        </div>
+        <div class="task" data-id={{task.id}} ng-repeat="task in tasks">
+            <div class="column number">{{$index+1}}</div>
+            <div class="column content">
+                <span class="title">{{task.title}}</span>
+                <span class="description">{{task.description}}</span>
+            </div>
+            <div class="column control">
+                <a href="#/task/{{$index+1}}" class="edit ico ico-pencil"></a>
+                <span class="delete ico ico-trash" ng-click="removeTask(task.id)" ng-disabled="pressed"></span>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,41 @@
+<section class="authentication">
+    <div class="container">
+        <h1 class="section-title">Welcome to TODO list</h1>
+        <form id="sign-up" ng-submit="saveDataForm()" ng-hide="hideForm">
+
+            <label for="regEmail"><span>*</span> Email address</label>
+            <input type="email" ng-model="formField.email" class="email" name="email" id="regEmail" placeholder="Email" required>
+
+            <label for="regUsername"><span>*</span> Username</label>
+            <input type="text" ng-model="formField.login" class="username" name="login" id="regUsername" placeholder="Username" required>
+
+            <label for="regFirstName"><span>*</span> First name</label>
+            <input type="text" ng-model="formField.firstName" class="first-name" name="firstName" id="regFirstName" placeholder="First name" required>
+
+
+            <label for="regLastName"><span>*</span> Last name</label>
+            <input type="text" ng-model="formField.lastName" class="last-name" name="lastName" id="regLastName" placeholder="Last name" required>
+
+            <label for="regPass"><span>*</span> Password</label>
+            <input type="password" ng-model="formField.password" class="password" name="password" id="regPass" placeholder="Password" required>
+
+            <label for="regConfPass"><span>*</span> Confirm password</label>
+            <input type="password" ng-model="formField.confPass" class="confirm-pass" name="confPass" id="regConfPass" placeholder="Confirm password" required>
+
+            <span class="invalid-message">{{error}}</span>
+
+            <button type="submit" ng-disabled="pressed" name="sign-up" >Sign up</button>
+            <a href="#/login"  class="btn" >Sign in</a>
+
+        </form>
+
+        <div class="after-action" ng-show="showSuccess">
+            <h3>Check your email to continue registration</h3>
+            <a href="#/login" class="btn">Come back</a>
+        </div>
+
+
+
+
+    </div>
+</section>

@@ -1,0 +1,21 @@
+<section class="section-content" id="add-task-section">
+    <div class="container">
+        <a href="#/tasks" class="btn back-to-list">Back</a>
+        <div class="task-list fill-task">
+            <form id="add-task" ng-submit="addNewTask()">
+
+                <label for="addTitle">Title</label>
+                <input type="text" ng-model="formField.title" name="title" id="addTitle" placeholder="Title" required>
+
+                <label for="addDesc">Description</label>
+                <textarea name="description" ng-model="formField.description" id="addDesc" placeholder="Description" maxlength="255"  required></textarea>
+                <span class="subscribe">* the max length is 255 characters</span>
+
+                <span class="invalid-message">{{error}}</span>
+
+                <button type="submit" name="add-task" ng-disabled="pressed">Add task</button>
+            </form>
+        </div>
+
+    </div>
+</section>

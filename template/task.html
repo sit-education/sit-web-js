@@ -1,0 +1,20 @@
+<section class="section-content" id="edit-task-section">
+    <div class="container">
+        <a href="#/tasks" class="btn back-to-list">Back</a>
+        <div class="task-list fill-task">
+            <form id="edit-task" ng-submit="saveEditTask()">
+
+                <label for="editTitle">Title</label>
+                <input type="text" name="title" id="editTitle" ng-model="task.title" placeholder="Title" required>
+                <label for="editDesc">Description</label>
+                <textarea name="description" ng-model="task.description" id="editDesc" placeholder="Description" maxlength="255"  required></textarea>
+                <span class="subscribe">* the max length is 255 characters</span>
+
+                <span class="invalid-message">{{error}}</span>
+
+                <button type="submit" name="edit-task" ng-disabled="pressed">Save task</button>
+            </form>
+        </div>
+
+    </div>
+</section>
