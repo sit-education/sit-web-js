@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app='myApp'>
+	<head>
+	    <meta charset="UTF-8">
+	    <title>TODO Angular</title>
+        <link rel="stylesheet" href="css/common.css">
+	</head>
+	<body ng-controller='mainController'>
+        <header id="header">
+            <div class="container">
+                <h1 class="logo">SIT Education</h1>
+                <button id="logout-btn" ng-click="logOut()" ng-if="loc.path() !== '/login' && loc.path() !== '/signUp' && loc.path() !== '/reset'">Log out</button>
+            </div>
+        </header>
+        <div ng-view></div>
+		
+
+
+
+
+
+
+
+	<script type='text/javascript' src='js/angular.js'></script>
+	<script type='text/javascript' src='js/angular-route.js'></script>
+	<script src='js/app.js'></script>
+
+    <script src="js/controllers/loginController.js"></script>
+    <script src="js/controllers/editTaskController.js"></script>
+    <script src="js/controllers/mainController.js"></script>
+    <script src="js/controllers/newTaskController.js"></script>
+    <script src="js/controllers/signUpController.js"></script>
+    <script src="js/controllers/tasksController.js"></script>
+    <script src="js/controllers/resetController.js"></script>
+	</body>
+</html>
