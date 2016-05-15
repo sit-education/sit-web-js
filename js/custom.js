@@ -5,7 +5,7 @@ $(document).ready(function () {
     var TOKEN_NAME = 'access-token';
     var MSG_SOME_ERROR = 'Sorry, unexpected error. Please try later';
     var MSG_DISCONNECT_ERROR = 'You have been disconnected';
-    var MSG_DELETED_ACCOUNT = 'Yor account was deleted'
+    var MSG_DELETED_ACCOUNT = 'Yor account was deleted';
     var INVALID_TOKEN = 'invalid_token';
     var jsonTaskData = 0;
     var taskId = 0;
