@@ -1308,7 +1308,7 @@ header button {
 }
 .authentication form button {
   width: 100%;
-  margin-top: 40px;
+  margin-top: 30px;
   text-transform: uppercase;
 }
 .authentication form a.btn {
