@@ -93,7 +93,6 @@ myApp.run(['$rootScope', '$http', '$location', function($rootScope, $http, $loca
             if(data.status){
 
                 $rootScope.tasks = data.data.todoData;
-                console.log($rootScope.tasks.length);
                 if(!$rootScope.tasks.length){
                     $rootScope.emptyList = true;
                 }else{
