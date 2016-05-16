@@ -1,7 +1,7 @@
 myApp.controller('newTaskController',['$scope', '$rootScope', '$location', '$http', function($scope, $rootScope, $location, $http){
 
     if($location.path() !== '/login' && $location.path() !== '/signUp' && $location.path() !== '/reset' && !getValueFromCookie(TOKEN_NAME)){
-        window.location.href = '#/login';
+        $location.path('/login');
     }
 
     var accessToken = getValueFromCookie(TOKEN_NAME);

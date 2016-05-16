@@ -111,6 +111,12 @@ myApp.run(['$rootScope', '$http', '$location', function($rootScope, $http, $loca
 myApp.config(['$routeProvider', function($routeProvide){
 	$routeProvide
 
+
+        .when('/',  {
+            templateUrl : 'template/login.html',
+            controller  : 'loginController'
+        })
+
 		.when('/login',  {
 			templateUrl : 'template/login.html',
 			controller  : 'loginController'
@@ -143,7 +149,7 @@ myApp.config(['$routeProvider', function($routeProvide){
 
 
 	    .otherwise({
-            redirectTo: '/login'
+            redirectTo: '/'
         });
 
 }]);

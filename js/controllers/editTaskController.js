@@ -1,7 +1,7 @@
 myApp.controller('editTaskController',['$scope', '$http', '$routeParams', '$rootScope', '$location', function($scope, $http, $routeParams, $rootScope, $location){
 
     if($location.path() !== '/login' && $location.path() !== '/signUp' && $location.path() !== '/reset' && !getValueFromCookie(TOKEN_NAME)){
-        window.location.href = '#/login';
+        $location.path('/login');
     }
 
     var accessToken = getValueFromCookie(TOKEN_NAME);
