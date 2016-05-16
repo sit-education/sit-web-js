@@ -11,16 +11,19 @@ var INVALID_TOKEN = 'invalid_token';
 function identifyCodeError(error){
     switch (error){
         case 500:
+            document.cookie = TOKEN_NAME + '=; path=/; expires= Thu, 01 Jan 1970 00:00:01 GMT';
             alert(MSG_SOME_ERROR);
             window.location.href = '#/login';
             break;
 
         case 410:
+            document.cookie = TOKEN_NAME + '=; path=/; expires= Thu, 01 Jan 1970 00:00:01 GMT';
             alert(MSG_DELETED_ACCOUNT);
             window.location.href = '#/login';
             break;
 
         default:
+            document.cookie = TOKEN_NAME + '=; path=/; expires= Thu, 01 Jan 1970 00:00:01 GMT';
             alert(MSG_SOME_ERROR);
             window.location.href = '#/login';
             break;
