@@ -74,6 +74,8 @@ myApp.run(['$rootScope', '$http', '$location', function($rootScope, $http, $loca
         window.location.href = '#/login';
     }
 
+    $rootScope.emptyList = false;
+
 
     $rootScope.updateTasks = function(){
         var accessToken = getValueFromCookie(TOKEN_NAME);
@@ -86,7 +88,14 @@ myApp.run(['$rootScope', '$http', '$location', function($rootScope, $http, $loca
             }
         }).success(function (data){
             if(data.status){
+
                 $rootScope.tasks = data.data.todoData;
+                console.log($rootScope.tasks.length);
+                if(!$rootScope.tasks.length){
+                    $rootScope.emptyList = true;
+                }else{
+                    $rootScope.emptyList = false;
+                }
             }else{
                 $rootScope.error = MSG_SOME_ERROR;
             }

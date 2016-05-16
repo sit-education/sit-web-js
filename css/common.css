@@ -1429,11 +1429,11 @@ header button {
   }
 }
 .section-content .task {
-  background-color: #fff;
+  background-color: #eae8e8;
   padding-bottom: 30px;
 }
-.section-content .task:nth-child(2n-1) {
-  background-color: #eae8e8;
+.section-content .task:nth-child(2n+1) {
+  background-color: #fff;
 }
 .section-content .task:last-child {
   border-bottom: 2px solid #eae8e8;
@@ -1490,7 +1490,7 @@ header button {
   text-transform: uppercase;
 }
 .note {
-  background-color: transparent;
+  background-color: #eae8e8 !important;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
