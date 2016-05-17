@@ -74,7 +74,7 @@ myApp.run(['$rootScope', '$http', '$location', function($rootScope, $http, $loca
     $rootScope.loc = $location;
 
     if($location.path() !== '/login' && $location.path() !== '/signUp' && $location.path() !== '/reset' && !getValueFromCookie(TOKEN_NAME)){
-        window.location.href = '#/login';
+        $location.path('/login');
     }
 
     $rootScope.emptyList = false;
